@@ -20,6 +20,11 @@ import org.jboss.logging.Logger;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.storage.UserStorageProviderFactory;
+import org.keycloak.provider.ProviderConfigProperty;
+import org.keycloak.provider.ProviderConfigurationBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
@@ -29,6 +34,20 @@ public class MyExampleUserStorageProviderFactory implements UserStorageProviderF
     public static final String PROVIDER_ID = "example-user-storage-jpa";
 
     private static final Logger logger = Logger.getLogger(MyExampleUserStorageProviderFactory.class);
+
+
+    protected static final List<ProviderConfigProperty> CONFIG_PROPERTIES;
+
+    static {
+        CONFIG_PROPERTIES = ProviderConfigurationBuilder.create()
+                .property()
+                .name("Text property")
+                .label("Text property")
+                .helpText("Help text property")
+                .type(ProviderConfigProperty.STRING_TYPE)
+                .add()
+                .build();
+    }
 
     @Override
     public MyUserStorageProvider create(KeycloakSession session, ComponentModel model) {
@@ -50,4 +69,10 @@ public class MyExampleUserStorageProviderFactory implements UserStorageProviderF
         logger.info("<<<<<< Closing factory");
 
     }
+
+    @Override
+    public List<ProviderConfigProperty> getConfigProperties() {
+        return CONFIG_PROPERTIES;
+    }
+
 }
